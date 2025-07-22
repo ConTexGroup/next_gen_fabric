@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conbello Textile: Next-Gen Fabric Infographic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top for better content flow */
+            min-height: 100vh;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: #2d3748; /* Slightly lighter dark background for container */
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            box-sizing: border-box;
+        }
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #63b3ed; /* Blue for main title */
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+        .section-button {
+            background-color: #4a5568; /* Darker gray for section buttons */
+            color: #e2e8f0;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-button:hover {
+            background-color: #5a67d8; /* Indigo on hover */
+            transform: translateY(-2px);
+        }
+        .section-button.active {
+            background-color: #5a67d8; /* Indigo when active */
+        }
+        .subsection-container {
+            padding-left: 1.5rem;
+            margin-top: -1rem; /* Adjust to bring closer to parent button */
+            margin-bottom: 1.5rem;
+            border-left: 3px solid #63b3ed; /* Blue border for visual hierarchy */
+            display: none; /* Hidden by default */
+        }
+        .subsection-container.show {
+            display: block;
+        }
+        .subsection-button {
+            background-color: #2d3748; /* Same as container for nested buttons */
+            color: #a0aec0; /* Lighter gray for sub-buttons */
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.08);
+        }
+        .subsection-button:hover {
+            background-color: #4a5568; /* Darker gray on hover */
+            color: #e2e8f0;
+        }
+        .content-text {
+            background-color: #1a202c; /* Darkest for content text */
+            color: #cbd5e0; /* Off-white for content */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            display: none; /* Hidden by default */
+            box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+        }
+        .content-text.show {
+            display: block;
+        }
+        .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+        .arrow-icon.rotate {
+            transform: rotate(90deg);
+        }
+        .content-image {
+            width: 100%;
+            max-width: 600px; /* Limit max width for images */
+            height: auto;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            display: block; /* Ensure image is block level for margin auto to work */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Bar Infographic Styles */
+        .bar-infographic-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #63b3ed;
+            text-align: center;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: #1a202c;
+            border-radius: 0.75rem;
+            box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+        }
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .bar-label {
+            flex-shrink: 0;
+            width: 150px; /* Fixed width for labels */
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #cbd5e0;
+        }
+        .bar-fill-container {
+            flex-grow: 1;
+            background-color: #4a5568; /* Base for the bar */
+            border-radius: 0.25rem;
+            height: 20px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            background-color: #63b3ed; /* Blue fill */
+            border-radius: 0.25rem;
+            transition: width 0.8s ease-out;
+        }
+        .bar-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #a0aec0;
+            width: 40px; /* Space for percentage */
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">Conbello Textile: Next-Gen Performance Fabric</h1>
+
+        <!-- Section: Introduction to Next-Gen Fabrics -->
+        <button class="section-button" onclick="toggleSection('intro')">
+            <span>Next-Gen Technical Fabrics: Performance, Comfort & Hygiene</span>
+            <span class="arrow-icon">&#9658;</span> <!-- Right arrow -->
+        </button>
+        <div id="intro" class="subsection-container">
+            <button class="subsection-button" onclick="toggleContent('intro-traditional')">Traditional Fabric Issues</button>
+            <div id="intro-traditional-content" class="content-text">
+                <p>Traditional fabrics like polyamide and polyester often cause discomfort and potential health problems. They contain high elastane, which leads to close direct contact with the skin, trapping moisture and keeping the skin and fabric wet. This results in excessive sweating, allergic reactions, and an increase in body temperature. Synthetic fabrics like polyamide, which cannot absorb and evaporate moisture, worsen this problem.</p>
+            </div>
+            <button class="subsection-button" onclick="toggleContent('intro-solution')">Conbello's Innovative Solution</button>
+            <div id="intro-solution-content" class="content-text">
+                <p>Conbello Textile's R&D department developed a new generation air-layer fabric technology to address these deficiencies. This innovative approach includes an air gap, similar to a film strip, between the fabric and the skin. This air layer minimizes fabric-skin contact and friction, significantly reducing sweating and the risk of allergic reactions.</p>
+            </div>
+            <button class="subsection-button" onclick="toggleContent('intro-features')">Key Features of Next-Gen Fabric</button>
+            <div id="intro-features-content" class="content-text">
+                <p>The ultra-soft inner and outer structure provides exceptional comfort in various environments (hot to cold). Unique features include exceptional durability, softness, and 55% spandex content.</p>
+            </div>
+        </div>
+
+        <!-- Section: Type 1: Next-Gen Air-Layer Fabric Technology -->
+        <button class="section-button" onclick="toggleSection('type1')">
+            <span>Type 1: Next-Gen Air-Layer Fabric Technology</span>
+            <span class="arrow-icon">&#9658;</span>
+        </button>
+        <div id="type1" class="subsection-container">
+            <button class="subsection-button" onclick="toggleContent('type1-feel')">Softer Feel</button>
+            <div id="type1-feel-content" class="content-text">
+                <p>Offers a significantly softer feel than traditional polyamide.</p>
+            </div>
+            <button class="subsection-button" onclick="toggleContent('type1-air-circulation')">Optimum Air Circulation</button>
+            <div id="type1-air-circulation-content" class="content-text">
+                <p>Creates an air layer between the fabric and the skin, providing optimum air circulation.</p>
+            </div>
+            <button class="subsection-button" onclick="toggleContent('type1-benefits')">Reduced Friction & Moisture Removal</button>
+            <div id="type1-benefits-content" class="content-text">
+                <p>Reduces friction and facilitates moisture removal, leading to a more comfortable and hygienic experience.</p>
+            </div>
+        </div>
+
+        <!-- Section: Type 2: Next-Gen Air-Lock Fabric Technology -->
+        <button class="section-button" onclick="toggleSection('type2')">
+            <span>Type 2: Next-Gen Air-Lock Fabric Technology</span>
+            <span class="arrow-icon">&#9658;</span>
+        </button>
+        <div id="type2" class="subsection-container">
+            <button class="subsection-button" onclick="toggleContent('type2-design')">Designed for Cooler Conditions</button>
+            <div id="type2-design-content" class="content-text">
+                <p>Specifically designed for cooler or colder outdoor conditions.</p>
+            </div>
+            <button class="subsection-button" onclick="toggleContent('type2-structure')">Laminated Structure & Air-Lock Layer</button>
+            <div id="type2-structure-content" class="content-text">
+                <p>Features a laminated structure that creates an air layer inside the main fabric. This air-lock layer provides an additional barrier against the elements.</p>
+            </div>
+            <button class="subsection-button" onclick="toggleContent('type2-benefits')">Keeps Wearer Warmer & Drier</button>
+            <div id="type2-benefits-content" class="content-text">
+                <p>Ideal for activities in cold environments, keeping the wearer warmer and drier.</p>
+            </div>
+        </div>
+
+        <!-- Section: Manufacturing Capabilities -->
+        <button class="section-button" onclick="toggleSection('manufacturing')">
+            <span>Manufacturing Capabilities & Apparel Examples</span>
+            <span class="arrow-icon">&#9658;</span>
+        </button>
+        <div id="manufacturing" class="subsection-container">
+            <button class="subsection-button" onclick="toggleContent('manufacturing-design-process')">Design & Production Process</button>
+            <div id="manufacturing-design-process-content" class="content-text">
+                <p>Conbello Textile designers can bring your garment ideas from a sketch to physical reality, offering end-to-end manufacturing solutions.</p>
+                <img src="https://storage.googleapis.com/bard-portal-uploaded-content-store/27367e56-6abf-4038-a065-555d231fbc53/End-to-end%20garment%20manufacturer.jpg"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x350/2d3748/e2e8f0?text=Image+Not+Found';"
+                     alt="End-to-end garment manufacturing process from sketch to physical product" loading="lazy" class="content-image">
+            </div>
+            <button class="subsection-button" onclick="toggleContent('manufacturing-apparel-examples')">Apparel Examples & Features</button>
+            <div id="manufacturing-apparel-examples-content" class="content-text">
+                <p>Showcasing various apparel types and their unique features, demonstrating the versatility of Next-Gen fabrics and manufacturing expertise.</p>
+                <img src="https://storage.googleapis.com/bard-portal-uploaded-content-store/73bd65e6-01f7-4f31-853d-e996954db009/Best-wholesale-fitness-apparel.jpg"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x350/2d3748/e2e8f0?text=Image+Not+Found';"
+                     alt="Best wholesale fitness apparel including leggings with rib fabric" loading="lazy" class="content-image">
+                <img src="https://storage.googleapis.com/bard-portal-uploaded-content-store/cf30d2b6-8df9-4cef-b26d-ca2d368fd921/Breeches%20with%20pockets%20on%20the%20sides.jpg"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x350/2d3748/e2e8f0?text=Image+Not+Found';"
+                     alt="Breeches with convenient side pockets" loading="lazy" class="content-image">
+                <img src="https://storage.googleapis.com/bard-portal-uploaded-content-store/75f86759-54bc-474e-85fb-80ff6017ecd3/Custom%20gym%20sports%20bra%20production.jpg"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x350/2d3748/e2e8f0?text=Image+Not+Found';"
+                     alt="Custom gym sports bra production with adjustable straps and different fabrics for compression" loading="lazy" class="content-image">
+                <img src="https://storage.googleapis.com/bard-portal-uploaded-content-store/bcf18015-6df4-4e3e-9ac5-61579006f5ce/Gym-clothing-manufacturing.jpg"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x350/2d3748/e2e8f0?text=Image+Not+Found';"
+                     alt="Gym clothing manufacturing showcasing a sports bra design" loading="lazy" class="content-image">
+            </div>
+            <button class="subsection-button" onclick="toggleContent('manufacturing-branding-printing')">Branding & Printing Technologies</button>
+            <div id="manufacturing-branding-printing-content" class="content-text">
+                <p>Explore advanced branding and printing solutions, including nano printing for unique effects, logo application, and durable printing technologies like HİPER SC printing.</p>
+                <img src="https://storage.googleapis.com/bard-portal-uploaded-content-store/06793c82-3c75-4d45-90ba-d5a26f63133a/Branding%20and%20printing%20technologies%20in%20custom%20made%20sportswear.jpg"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x350/2d3748/e2e8f0?text=Image+Not+Found';"
+                     alt="Examples of Nano printing technologies for custom made sportswear" loading="lazy" class="content-image">
+                <img src="https://storage.googleapis.com/bard-portal-uploaded-content-store/20dcf634-4fbe-4c41-a115-c291d671eb18/Brand-Logo-Printing.jpg"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x350/2d3748/e2e8f0?text=Image+Not+Found';"
+                     alt="Brand logo printing and marking-labeling application on fabric" loading="lazy" class="content-image">
+                <img src="https://storage.googleapis.com/bard-portal-uploaded-content-store/ba7ebf08-f35a-4ee9-937b-ebb2b0f8a598/custom-t-shirt-maker-Turkey.jpg"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x350/2d3748/e2e8f0?text=Image+Not+Found';"
+                     alt="Custom T-shirt manufacturing with flat lock stitching and embossed screen printing" loading="lazy" class="content-image">
+                <img src="https://storage.googleapis.com/bard-portal-uploaded-content-store/a3522238-95a5-4a1b-81da-f8897fb0528f/High%20quality%20custom%20design%20luxury%20clothing%20manufacturing.jpg"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x350/2d3748/e2e8f0?text=Image+Not+Found';"
+                     alt="High quality custom design luxury clothing manufacturing with HİPER SC printing" loading="lazy" class="content-image">
+                <img src="https://storage.googleapis.com/bard-portal-uploaded-content-store/a8e78701-44a2-40d6-81b3-b70ffbbae2ea/High-quality%20T-shirt%20Manufacturing.jpg"
+                     onerror="this.onerror=null; this.src='https://placehold.co/600x350/2d3748/e2e8f0?text=Image+Not+Found';"
+                     alt="High-quality T-shirt manufacturing with 3D printing technology and advanced sewing" loading="lazy" class="content-image">
+            </div>
+        </div>
+
+        <!-- Section: Conclusion -->
+        <button class="section-button" onclick="toggleSection('conclusion')">
+            <span>Conclusion: Advancement in Textile Innovation</span>
+            <span class="arrow-icon">&#9658;</span>
+        </button>
+        <div id="conclusion" class="subsection-container">
+            <button class="subsection-button" onclick="toggleContent('conclusion-advancement')">Significant Advancement</button>
+            <div id="conclusion-advancement-content" class="content-text">
+                <p>The air-layer Next-Gen fabric technology represents a significant advancement in textile innovation.</p>
+            </div>
+            <button class="subsection-button" onclick="toggleContent('conclusion-addressing')">Addressing Limitations</button>
+            <div id="conclusion-addressing-content" class="content-text">
+                <p>It addresses the limitations of traditional polyester and polyamide (nylon) fabrics.</p>
+            </div>
+            <button class="subsection-button" onclick="toggleContent('conclusion-benefits')">Improved Comfort & Management</button>
+            <div id="conclusion-benefits-content" class="content-text">
+                <p>These materials offer improved comfort, breathability, and moisture management.</p>
+            </div>
+            <button class="subsection-button" onclick="toggleContent('conclusion-solution')">Superior Solution</button>
+            <div id="conclusion-solution-content" class="content-text">
+                <p>Whether for everyday wear or outdoor activities, air-layer fabrics offer a superior solution.</p>
+            </div>
+        </div>
+
+        <!-- Overview Bar Infographic -->
+        <h2 class="bar-infographic-title">Key Focus Areas</h2>
+        <div class="bar-chart">
+            <div class="bar-item">
+                <div class="bar-label">Fabric Innovation</div>
+                <div class="bar-fill-container">
+                    <div class="bar-fill" style="width: 90%;"></div>
+                </div>
+                <div class="bar-value">90%</div>
+            </div>
+            <div class="bar-item">
+                <div class="bar-label">Comfort & Hygiene</div>
+                <div class="bar-fill-container">
+                    <div class="bar-fill" style="width: 85%;"></div>
+                </div>
+                <div class="bar-value">85%</div>
+            </div>
+            <div class="bar-item">
+                <div class="bar-label">Moisture Management</div>
+                <div class="bar-fill-container">
+                    <div class="bar-fill" style="width: 80%;"></div>
+                </div>
+                <div class="bar-value">80%</div>
+            </div>
+            <div class="bar-item">
+                <div class="bar-label">Durability & Softness</div>
+                <div class="bar-fill-container">
+                    <div class="bar-fill" style="width: 75%;"></div>
+                </div>
+                <div class="bar-value">75%</div>
+            </div>
+            <div class="bar-item">
+                <div class="bar-label">Manufacturing Expertise</div>
+                <div class="bar-fill-container">
+                    <div class="bar-fill" style="width: 70%;"></div>
+                </div>
+                <div class="bar-value">70%</div>
+            </div>
+            <div class="bar-item">
+                <div class="bar-label">Branding & Printing</div>
+                <div class="bar-fill-container">
+                    <div class="bar-fill" style="width: 65%;"></div>
+                </div>
+                <div class="bar-value">65%</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle the visibility of a section (subsection-container)
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const button = section.previousElementSibling; // The button that triggered this section
+            const arrow = button.querySelector('.arrow-icon');
+
+            // Close all other open sections and their content
+            document.querySelectorAll('.subsection-container.show').forEach(openSection => {
+                if (openSection.id !== sectionId) {
+                    openSection.classList.remove('show');
+                    openSection.previousElementSibling.classList.remove('active');
+                    openSection.previousElementSibling.querySelector('.arrow-icon').classList.remove('rotate');
+                    // Also close any open content within other sections
+                    openSection.querySelectorAll('.content-text.show').forEach(content => {
+                        content.classList.remove('show');
+                    });
+                }
+            });
+
+            // Toggle the clicked section
+            section.classList.toggle('show');
+            button.classList.toggle('active');
+            arrow.classList.toggle('rotate');
+
+            // If the section is being hidden, also hide its sub-content
+            if (!section.classList.contains('show')) {
+                section.querySelectorAll('.content-text.show').forEach(content => {
+                    content.classList.remove('show');
+                });
+            }
+        }
+
+        // Function to toggle the visibility of content text within a subsection
+        function toggleContent(contentId) {
+            const content = document.getElementById(contentId + '-content');
+            const parentSection = content.closest('.subsection-container');
+
+            // Close other open content within the same parent section
+            parentSection.querySelectorAll('.content-text.show').forEach(openContent => {
+                if (openContent.id !== content.id) {
+                    openContent.classList.remove('show');
+                }
+            });
+
+            // Toggle the clicked content
+            content.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>
